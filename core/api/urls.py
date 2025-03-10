@@ -1,8 +1,9 @@
+# coding: utf-8
 from django.urls import path
-from rest_framework import routers
-from .views import DeviceAPIView 
 
-router = routers.DefaultRouter()
-router.register(r'device', DeviceAPIView)
+from . import views
 
-urlpatterns = router.urls
+urlpatterns = [
+  path('device/', views.TaskCreateListAPIView.as_view()),
+  path('device/<int:pk>/', views.TaskRetrieveUpdataDestroyAPIView.as_view()),
+]
