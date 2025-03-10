@@ -5,3 +5,4 @@ from .views import DeviceAPIView
 router = routers.DefaultRouter()
 router.register(r'device', DeviceAPIView)
 
+urlpatterns = router.urls
