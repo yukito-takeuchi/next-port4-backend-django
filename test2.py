@@ -15,10 +15,16 @@ eval_num = spot.find('span', class_='evaluateNumber').text
 
 categoryItems = spot.find(class_='u_categoryTipsItem col s12')
 categoryItems = categoryItems.find_all('dl')
-categoryItem = categoryItems[0]
-# print(categoryItem)
-rank = categoryItem.dd.text
-print(rank)
-category = categoryItem.dt.text
-print(category)
+# categoryItem = categoryItems[0]
+# rank = categoryItem.dd.text
+# print(rank)
+# category = categoryItem.dt.text
+# print(category)
 
+details = {}
+for categoryItem in categoryItems:
+    rank = float(categoryItem.dd.text)
+    category = categoryItem.dt.text
+    details[category] = rank
+
+print(details)
