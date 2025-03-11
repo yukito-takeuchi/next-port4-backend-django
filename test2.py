@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+
 amazonURL = 'https://scraping-for-beginner.herokuapp.com/ranking/'
 
 amazonPage = requests.get(amazonURL)
@@ -36,4 +38,8 @@ for spot in spots:
     detum['評点'] = eval_num
     data.append(detum)
 
-print(data)
+df = pd.DataFrame(data)
+# print(df.columns)
+df = df[['観光地名', '評点', 'アクセス', '楽しさ', '人混みの多さ', '景色']]
+print(df)
+df.to_csv('観光地情報.csv', index=False)
