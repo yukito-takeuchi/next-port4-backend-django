@@ -4,6 +4,11 @@ from rest_framework.response import Response
 from .serializers import DeviceSerializer
 
 from ..models import Post, Job
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+ 
 
 
 class TaskCreateListAPIView(views.APIView):
@@ -21,8 +26,12 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
     """ Taskモデルの一覧取得API """
     # 複数のobjectの場合、many=Trueを指定します
+    scrape_and_save()
     serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
     return Response(serializer.data, status.HTTP_200_OK)
+
+
+
 
 class TaskRetrieveUpdataDestroyAPIView(views.APIView):
   """ Taskモデルのpk APIクラス """
@@ -56,3 +65,39 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
     task = get_object_or_404(Job, pk=pk)
     task.delete()
     return Response(status.HTTP_200_OK)
+  
+
+def scrape_and_save():
+    amazonURL = 'https://scraping-for-beginner.herokuapp.com/ranking/'
+
+    amazonPage = requests.get(amazonURL)
+    soup = BeautifulSoup(amazonPage.text, "html.parser")
+    data = []
+    spots = soup.find_all('div', class_='u_areaListRankingBox row')
+    # get_a = content.find_all('a')
+    for spot in spots:
+        spot_name = spot.find(class_='u_title col s12')
+        spot_name.find('span').extract()
+        spot_name = spot_name.text.replace('\n','')
+        rank = float(spot.find(class_='evaluateNumber').text )
+
+
+        categoryItems = spot.find(class_='u_categoryTipsItem col s12')
+        categoryItems = categoryItems.find_all('dl')
+
+        details = {}
+        for categoryItem in categoryItems:
+            rank = float(categoryItem.dd.text)
+            category = categoryItem.dt.text
+            details[category] = rank
+
+        detum = details
+        detum['観光地名'] = spot_name
+        detum['評点'] = rank
+        data.append(detum)
+        # print(details['楽しさ'])
+
+        Job.objects.create(spot = detum['観光地名'], rank = detum['評点'], acucess = detum['アクセス'], fun = detum['楽しさ'], many = detum['人混みの多さ'], view = detum['景色'])
+
+    # print(data[0]['楽しさ'])
+
