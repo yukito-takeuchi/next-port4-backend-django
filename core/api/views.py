@@ -95,9 +95,8 @@ def scrape_and_save():
         detum['評点'] = rank
         data.append(detum)
         # print(details['楽しさ'])
-        jobs = detum
-
         # jobs = Job.objects.create(spot = detum['観光地名'], rank = detum['評点'], acucess = detum['アクセス'], fun = detum['楽しさ'], many = detum['人混みの多さ'], view = detum['景色'])
-    return jobs
+ 
+    return data
     # print(data[0]['楽しさ'])
 
