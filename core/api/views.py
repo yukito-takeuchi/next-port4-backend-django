@@ -26,9 +26,8 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
     """ Taskモデルの一覧取得API """
     # 複数のobjectの場合、many=Trueを指定します
-    scrape_and_save()
-    serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
-    return Response(serializer.data, status.HTTP_200_OK)
+    jobs = scrape_and_save()
+    return Response(jobs, status.HTTP_200_OK)
 
 
 
@@ -96,8 +95,9 @@ def scrape_and_save():
         detum['評点'] = rank
         data.append(detum)
         # print(details['楽しさ'])
+        jobs = detum
 
-        Job.objects.create(spot = detum['観光地名'], rank = detum['評点'], acucess = detum['アクセス'], fun = detum['楽しさ'], many = detum['人混みの多さ'], view = detum['景色'])
-
+        # jobs = Job.objects.create(spot = detum['観光地名'], rank = detum['評点'], acucess = detum['アクセス'], fun = detum['楽しさ'], many = detum['人混みの多さ'], view = detum['景色'])
+    return jobs
     # print(data[0]['楽しさ'])
 
