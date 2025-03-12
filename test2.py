@@ -13,13 +13,28 @@ soup = BeautifulSoup(amazonPage.text, "html.parser")
 data = []
 spots = soup.find_all('div', class_='u_areaListRankingBox row')
 # get_a = content.find_all('a')
-spots = spots[0]
+for spot in spots:
+    spot_name = spot.find(class_='u_title col s12')
+    spot_name.find('span').extract()
+    spot_name = spot_name.text.replace('\n','')
+    rank = float(spot.find(class_='evaluateNumber').text )
 
-spot_name = spots.find(class_='u_title col s12')
-spot_name.find('span').extract()
-spot_name = spot_name.text.replace('\n','')
-rank = float(spots.find(class_='evaluateNumber').text )
-print(spot_name, rank)
+
+    categoryItems = spot.find(class_='u_categoryTipsItem col s12')
+    categoryItems = categoryItems.find_all('dl')
+
+    details = {}
+    for categoryItem in categoryItems:
+        rank = float(categoryItem.dd.text)
+        category = categoryItem.dt.text
+        details[category] = rank
+
+detum = details
+detum['観光地名'] = spot_name
+detum['評点'] = rank
+data.append(detum)
+# print(details['楽しさ'])
+print(data)
 
 
 # for spot in spots:
