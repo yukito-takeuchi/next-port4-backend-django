@@ -3,7 +3,7 @@ from rest_framework import status, views
 from rest_framework.response import Response
 from .serializers import DeviceSerializer
 
-from ..models import Post
+from ..models import Post, Job
 
 
 class TaskCreateListAPIView(views.APIView):
@@ -21,7 +21,7 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
     """ Taskモデルの一覧取得API """
     # 複数のobjectの場合、many=Trueを指定します
-    serializer = DeviceSerializer(instance=Post.objects.all(), many=True)
+    serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 class TaskRetrieveUpdataDestroyAPIView(views.APIView):
@@ -30,13 +30,13 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
   def get(self, request, pk, *args, **kwargs):
     """ Taskモデルの詳細取得API """
     # モデルオブジェクトを取得
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     serializer = DeviceSerializer(instance=task)
     return Response(serializer.data, status.HTTP_200_OK)
 
   def put(self, request, pk, *args, **kwargs):
     """ Taskモデルの更新API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     serializer = DeviceSerializer(instance=task, data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -44,7 +44,7 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
 
   def patch(self, request, pk, *args, **kwargs):
     """ Taskモデルの更新API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     # partial=Trueにより、request.dataで指定したデータのみ更新される
     serializer = DeviceSerializer(instance=task, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
@@ -53,6 +53,6 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
 
   def delete(self, request, pk, *args, **kwargs):
     """ Taskモデルの削除API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     task.delete()
     return Response(status.HTTP_200_OK)
