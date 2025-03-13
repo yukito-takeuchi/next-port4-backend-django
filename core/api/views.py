@@ -16,9 +16,9 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
      """ Taskモデルの一覧取得API """
      # 複数のobjectの場合、many=Trueを指定します
-     jobs = scrape_jobs()
-    #  serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
-     return Response(jobs, status.HTTP_200_OK)
+    #  jobs = scrape_jobs()
+     serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
+     return Response(serializer.data, status.HTTP_200_OK)
   
   def post(self, request, *args, **kwargs):
     # JSON文字列をレスポンスとして返す
@@ -51,8 +51,7 @@ def scrape_and_jobCreate(request):
     if request.method == 'POST':
         url = request.POST.get('url')
         try:
-            jobs = scrape_jobs_create(url)
-            Job.objects.create()
+            jobs = scrape_createJob(url)
             data = {'jobs': jobs}
             return JsonResponse(data)
         except Exception as e:
@@ -210,6 +209,33 @@ def scrape_jobs_create(url):
             'company': company,
             'place': place,
         }
+        data.append(detum)
+    # print(data[0]['title'])
+    return  data
+
+def scrape_createJob(url):
+    amazonURL = url
+
+    amazonPage = requests.get(amazonURL)
+    soup = BeautifulSoup(amazonPage.text, "html.parser")
+    data = []
+    spots = soup.find_all('li', class_='ProjectListJobPostsLaptop__ProjectListItem-sc-79m74y-12 irQOzL')
+    for spot in spots:
+        title = spot.find('h2', class_='ProjectListJobPostItem__TitleText-sc-bjcnhh-5 gCpJyB wui-reset wui-text wui-text-headline2').text
+        company = spot.find('p', class_='JobPostCompanyWithWorkingConnectedUser__CompanyNameText-sc-1nded7v-5 hIALDA wui-reset wui-text wui-text-body2').text
+        places = soup.find_all('ul', class_="ListWithMore__Ul-sc-1968quv-1 eKMonf")
+        # place = places('li', class_="ListItem__Li-sc-1ty6hrk-0 ListItem__SelectableLi-sc-1ty6hrk-3 cTnFUW bcGmGW wui-reaction-by-color wui-reaction-overlay-black wui-text-body2 wui-listItem wui-listItem-dence")
+        place = places[1].find('li', {'aria-selected': 'true'}).text
+        
+        # print(title)
+        # print(company)
+        # print(place)
+        detum = {
+            'title': title,
+            'company': company,
+            'place': place,
+        }
+        Job.objects.create(title=detum['title'], company=detum['company'], place=detum['place'])
         data.append(detum)
     # print(data[0]['title'])
     return  data
