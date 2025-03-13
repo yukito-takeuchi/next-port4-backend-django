@@ -9,16 +9,23 @@ def scrape_and_save():
     soup = BeautifulSoup(amazonPage.text, "html.parser")
     data = []
     spots = soup.find_all('li', class_='ProjectListJobPostsLaptop__ProjectListItem-sc-79m74y-12 irQOzL')
-    spot = spots[0]
-    title = spot.find('h2', class_='ProjectListJobPostItem__TitleText-sc-bjcnhh-5 gCpJyB wui-reset wui-text wui-text-headline2').text
-    company = spot.find('p', class_='JobPostCompanyWithWorkingConnectedUser__CompanyNameText-sc-1nded7v-5 hIALDA wui-reset wui-text wui-text-body2').text
-    places = soup.find_all('ul', class_="ListWithMore__Ul-sc-1968quv-1 eKMonf")
-    # place = places('li', class_="ListItem__Li-sc-1ty6hrk-0 ListItem__SelectableLi-sc-1ty6hrk-3 cTnFUW bcGmGW wui-reaction-by-color wui-reaction-overlay-black wui-text-body2 wui-listItem wui-listItem-dence")
-    place = places[1].find('li', {'aria-selected': 'true'}).text
-    
-    print(title)
-    print(company)
-    print(place)
+    for spot in spots:
+        title = spot.find('h2', class_='ProjectListJobPostItem__TitleText-sc-bjcnhh-5 gCpJyB wui-reset wui-text wui-text-headline2').text
+        company = spot.find('p', class_='JobPostCompanyWithWorkingConnectedUser__CompanyNameText-sc-1nded7v-5 hIALDA wui-reset wui-text wui-text-body2').text
+        places = soup.find_all('ul', class_="ListWithMore__Ul-sc-1968quv-1 eKMonf")
+        # place = places('li', class_="ListItem__Li-sc-1ty6hrk-0 ListItem__SelectableLi-sc-1ty6hrk-3 cTnFUW bcGmGW wui-reaction-by-color wui-reaction-overlay-black wui-text-body2 wui-listItem wui-listItem-dence")
+        place = places[1].find('li', {'aria-selected': 'true'}).text
+        
+        print(title)
+        print(company)
+        print(place)
+        detum = {
+            'title': title,
+            'company': company,
+            'place': place,
+        }
+        data.append(detum)
+        print(data)
 
 
     # 共通レイアウトここまで
