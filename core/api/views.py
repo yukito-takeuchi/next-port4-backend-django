@@ -16,7 +16,7 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
      """ Taskモデルの一覧取得API """
      # 複数のobjectの場合、many=Trueを指定します
-    #  jobs = scrape_jobs()
+     scrape_createJob()
      serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
      return Response(serializer.data, status.HTTP_200_OK)
   
@@ -34,7 +34,7 @@ class TaskCreateListAPIView(views.APIView):
 
 
 @csrf_exempt
-def scrape_and_api(request):
+def JobsPage(request):
     if request.method == 'POST':
         url = request.POST.get('url')
         try:
@@ -46,18 +46,20 @@ def scrape_and_api(request):
     else:
             return JsonResponse({'error': 'POSTリクエストのみ受け付けます'}, status=405)
     
-@csrf_exempt
-def scrape_and_jobCreate(request):
-    if request.method == 'POST':
-        url = request.POST.get('url')
-        try:
-            jobs = scrape_createJob(url)
-            data = {'jobs': jobs}
-            return JsonResponse(data)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    else:
-            return JsonResponse({'error': 'POSTリクエストのみ受け付けます'}, status=405)
+# @csrf_exempt
+# def CreateJobsPage(request):
+#     if request.method == 'POST':
+#         url = request.POST.get('url')
+#         try:
+#             jobs = scrape_createJob(url)
+#             data = {'jobs': jobs}
+#             return JsonResponse(data)
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+#     else:
+#             return JsonResponse({'error': 'POSTリクエストのみ受け付けます'}, status=405)
+
+
 
 class TaskRetrieveUpdataDestroyAPIView(views.APIView):
   """ Taskモデルのpk APIクラス """
@@ -187,8 +189,8 @@ def scrape_jobs():
     # print(data[0]['title'])
     return  data
 
-def scrape_jobs_create(url):
-    amazonURL = url
+def scrape_jobs_create():
+    amazonURL = 'https://www.wantedly.com/projects?new=true&page=1&occupationTypes=jp__engineering&hiringTypes=internship&areas=kyoto&order=mixed'
 
     amazonPage = requests.get(amazonURL)
     soup = BeautifulSoup(amazonPage.text, "html.parser")
@@ -213,8 +215,8 @@ def scrape_jobs_create(url):
     # print(data[0]['title'])
     return  data
 
-def scrape_createJob(url):
-    amazonURL = url
+def scrape_createJob():
+    amazonURL = 'https://www.wantedly.com/projects?new=true&page=1&occupationTypes=jp__engineering&hiringTypes=internship&areas=kyoto&order=mixed'
 
     amazonPage = requests.get(amazonURL)
     soup = BeautifulSoup(amazonPage.text, "html.parser")
@@ -230,13 +232,18 @@ def scrape_createJob(url):
         # print(title)
         # print(company)
         # print(place)
-        detum = {
-            'title': title,
-            'company': company,
-            'place': place,
-        }
+        # detum = {
+        #     'title': title,
+        #     'company': company,
+        #     'place': place,
+        # }
+        detum = {}
+        detum['title'] = title
+        detum['company'] = company
+        detum['place'] = place
+        data.append(detum)
+
         Job.objects.create(title=detum['title'], company=detum['company'], place=detum['place'])
-        data.append(detum)
     # print(data[0]['title'])
-    return  data
+
 

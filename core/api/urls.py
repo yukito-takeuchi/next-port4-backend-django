@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
   path('device/', views.TaskCreateListAPIView.as_view()),
   path('device/<int:pk>/', views.TaskRetrieveUpdataDestroyAPIView.as_view()),
-  path('jobs/', views.scrape_and_api),
-  path('jobs-create/', views.scrape_and_jobCreate),
+  path('jobs/', views.JobsPage),
+  # path('jobs-create/', views.CreateJobsPage),
 
 ]
