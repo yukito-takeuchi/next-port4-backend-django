@@ -45,6 +45,20 @@ def scrape_and_api(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
             return JsonResponse({'error': 'POSTリクエストのみ受け付けます'}, status=405)
+    
+@csrf_exempt
+def scrape_and_jobCreate(request):
+    if request.method == 'POST':
+        url = request.POST.get('url')
+        try:
+            jobs = scrape_jobs_create(url)
+            Job.objects.create()
+            data = {'jobs': jobs}
+            return JsonResponse(data)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+            return JsonResponse({'error': 'POSTリクエストのみ受け付けます'}, status=405)
 
 class TaskRetrieveUpdataDestroyAPIView(views.APIView):
   """ Taskモデルのpk APIクラス """
