@@ -51,9 +51,9 @@ def CreateJobsPage(request):
     if request.method == 'POST':
         url = request.POST.get('url')
         try:
-            scrape_createJob(url)
+            jobs = scrape_createJob(url)
             # jobs = Job.objects.all()
-            data = {}
+            data = {'jobs': jobs}
             return JsonResponse(data)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
@@ -221,6 +221,9 @@ def scrape_jobs(url):
     # print(data[0]['title'])
     return  data
 
+
+
+
 def scrape_createJob(url):
     amazonURL = url
     amazonPage = requests.get(amazonURL)
@@ -247,8 +250,7 @@ def scrape_createJob(url):
         detum['company'] = company
         detum['place'] = place
         data.append(detum)
-
         Job.objects.create(title=detum['title'], company=detum['company'], place=detum['place'])
     # print(data[0]['title'])
-
+    return data
 
