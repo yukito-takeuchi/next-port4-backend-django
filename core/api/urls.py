@@ -7,6 +7,6 @@ urlpatterns = [
   path('device/', views.TaskCreateListAPIView.as_view()),
   path('device/<int:pk>/', views.TaskRetrieveUpdataDestroyAPIView.as_view()),
   path('jobs/', views.JobsPage),
-  # path('jobs-create/', views.CreateJobsPage),
+  path('jobs-create/', views.CreateJobsPage),
 
 ]
