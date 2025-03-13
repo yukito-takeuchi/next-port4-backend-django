@@ -16,9 +16,9 @@ class TaskCreateListAPIView(views.APIView):
   def get(self, request, *args, **kwargs):
      """ Taskモデルの一覧取得API """
      # 複数のobjectの場合、many=Trueを指定します
-    #  scrape_and_save()
-     serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
-     return Response(serializer.data, status.HTTP_200_OK)
+     jobs = scrape_and_save()
+    #  serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
+     return Response(jobs, status.HTTP_200_OK)
   
   def post(self, request, *args, **kwargs):
     # JSON文字列をレスポンスとして返す

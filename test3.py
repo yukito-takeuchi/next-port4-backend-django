@@ -3,13 +3,18 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 def scrape_and_save():
-    amazonURL = 'https://scraping-for-beginner.herokuapp.com/ranking/'
+    amazonURL = 'https://www.wantedly.com/projects?new=true&page=1&occupationTypes=jp__engineering&hiringTypes=internship&areas=kyoto&order=mixed'
 
     amazonPage = requests.get(amazonURL)
     soup = BeautifulSoup(amazonPage.text, "html.parser")
     data = []
     spots = soup.find_all('div', class_='u_areaListRankingBox row')
     # get_a = content.find_all('a')
+
+
+
+    # 共通レイアウトここまで
+    # 個別レイアウトここから
     for spot in spots:
         spot_name = spot.find(class_='u_title col s12')
         spot_name.find('span').extract()
