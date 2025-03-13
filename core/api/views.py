@@ -13,6 +13,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 class TaskCreateListAPIView(views.APIView):
   """ Taskモデルの登録API """
+  def get(self, request, *args, **kwargs):
+     """ Taskモデルの一覧取得API """
+     # 複数のobjectの場合、many=Trueを指定します
+    #  scrape_and_save()
+     serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
+     return Response(serializer.data, status.HTTP_200_OK)
+  
   def post(self, request, *args, **kwargs):
     # JSON文字列をレスポンスとして返す
     serializer = DeviceSerializer(data=request.data)
@@ -23,11 +30,6 @@ class TaskCreateListAPIView(views.APIView):
     # JSON文字列をレスポンスとして返す
     return Response(serializer.data, status.HTTP_201_CREATED)
 
-  def get(self, request, *args, **kwargs):
-    """ Taskモデルの一覧取得API """
-    # 複数のobjectの場合、many=Trueを指定します
-    jobs = scrape(request.data)
-    return Response(jobs, status.HTTP_200_OK)
 
 
 
