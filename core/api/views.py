@@ -52,8 +52,8 @@ def CreateJobsPage(request):
         url = request.POST.get('url')
         try:
             scrape_createJob(url)
-            jobs = Job.objects.all()
-            data = {'jobs': jobs}
+            # jobs = Job.objects.all()
+            data = {}
             return JsonResponse(data)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
