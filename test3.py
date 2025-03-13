@@ -16,16 +16,17 @@ def scrape_and_save():
         # place = places('li', class_="ListItem__Li-sc-1ty6hrk-0 ListItem__SelectableLi-sc-1ty6hrk-3 cTnFUW bcGmGW wui-reaction-by-color wui-reaction-overlay-black wui-text-body2 wui-listItem wui-listItem-dence")
         place = places[1].find('li', {'aria-selected': 'true'}).text
         
-        print(title)
-        print(company)
-        print(place)
+        # print(title)
+        # print(company)
+        # print(place)
         detum = {
             'title': title,
             'company': company,
             'place': place,
         }
         data.append(detum)
-        print(data)
+    # print(data[0]['title'])
+    print(data)
 
 
     # 共通レイアウトここまで
