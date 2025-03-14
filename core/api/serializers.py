@@ -4,7 +4,7 @@ from ..models import Post, Job
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post 
-        fields = ['id', 'title', 'content']
+        fields = ['id', 'title', 'status']
 
 # class DeviceSerializer(serializers.ModelSerializer):
 #     class Meta:
