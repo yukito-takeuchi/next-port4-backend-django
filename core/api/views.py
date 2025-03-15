@@ -17,7 +17,7 @@ class TaskCreateListAPIView(views.APIView):
      """ Taskモデルの一覧取得API """
      # 複数のobjectの場合、many=Trueを指定します
     #  scrape_createJob()
-     serializer = DeviceSerializer(instance=Post.objects.all(), many=True)
+     serializer = DeviceSerializer(instance=Job.objects.all(), many=True)
      return Response(serializer.data, status.HTTP_200_OK)
   
   def post(self, request, *args, **kwargs):
@@ -68,13 +68,13 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
   def get(self, request, pk, *args, **kwargs):
     """ Taskモデルの詳細取得API """
     # モデルオブジェクトを取得
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     serializer = DeviceSerializer(instance=task)
     return Response(serializer.data, status.HTTP_200_OK)
 
   def put(self, request, pk, *args, **kwargs):
     """ Taskモデルの更新API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     serializer = DeviceSerializer(instance=task, data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -82,7 +82,7 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
 
   def patch(self, request, pk, *args, **kwargs):
     """ Taskモデルの更新API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     # partial=Trueにより、request.dataで指定したデータのみ更新される
     serializer = DeviceSerializer(instance=task, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
@@ -91,7 +91,7 @@ class TaskRetrieveUpdataDestroyAPIView(views.APIView):
 
   def delete(self, request, pk, *args, **kwargs):
     """ Taskモデルの削除API """
-    task = get_object_or_404(Post, pk=pk)
+    task = get_object_or_404(Job, pk=pk)
     task.delete()
     return Response(status.HTTP_200_OK)
   
@@ -231,7 +231,7 @@ def scrape_createJob(url):
     data = []
     spots = soup.find_all('li', class_='ProjectListJobPostsLaptop__ProjectListItem-sc-79m74y-12 irQOzL')
     for spot in spots:
-        title = spot.find('h2', class_='ProjectListJobPostItem__TitleText-sc-bjcnhh-5 gCpJyB wui-reset wui-text wui-text-headline2').text
+        status = '応募中'
         company = spot.find('p', class_='JobPostCompanyWithWorkingConnectedUser__CompanyNameText-sc-1nded7v-5 hIALDA wui-reset wui-text wui-text-body2').text
         places = soup.find_all('ul', class_="ListWithMore__Ul-sc-1968quv-1 eKMonf")
         # place = places('li', class_="ListItem__Li-sc-1ty6hrk-0 ListItem__SelectableLi-sc-1ty6hrk-3 cTnFUW bcGmGW wui-reaction-by-color wui-reaction-overlay-black wui-text-body2 wui-listItem wui-listItem-dence")
@@ -246,11 +246,11 @@ def scrape_createJob(url):
         #     'place': place,
         # }
         detum = {}
-        detum['title'] = title
+        detum['status'] = status
         detum['company'] = company
         detum['place'] = place
         data.append(detum)
-        Job.objects.create(title=detum['title'], company=detum['company'], place=detum['place'])
+        Job.objects.create(status=detum['status'], company=detum['company'], place=detum['place'])
     # print(data[0]['title'])
     return data
 
