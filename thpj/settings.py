@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ci5%0z86z2f*pgz-0wp&a_#i+p$s31_fy9)xq&@8%&#u0b7!!@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -128,5 +128,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 追加
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Next.jsアプリケーションのURL
+    "http://localhost:3000",
+    "https://next-port5-frontend-page-r-git-e50f87-ajdjaiuoapooiads-projects.vercel.app/",  # Next.jsアプリケーションのURL
+    "https://next-port5-frontend-page-router-jbzh-hg8lmuwvr.vercel.app/",
+    'https://next-port5-frontend-page-router-yrat.vercel.app/',
 ]
