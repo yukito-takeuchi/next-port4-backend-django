@@ -85,16 +85,13 @@ WSGI_APPLICATION = 'thpj.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE':'django.db.backends.postgresql_psycopg2', # PostgreSQL使いますよ宣言
-        'NAME': 'appdb', # データベース名
-        'USER': 'postgres', # データベースに接続するDBユーザー名
-        'PASSWORD': 'password1', # データベースに接続する際のDBユーザのパスワード
-        'HOST': '', # 'localhost'
-        'PORT': '', # 5432
-    }
-}
+import dj_database_url
+# ~省略~
+default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
+DATABASES = {'default': dj_database_url.config(default=default_dburl)}
+# postgresqlを設定する場合の書式は、postgresql://user_name:password@localhost:port/database_name（以下では、既存のものを書籍に当てはめている）
+# DATABASES = {'default': dj_database_url.parse('postgresql://postgres:password1@localhost:5432/appdb')}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
