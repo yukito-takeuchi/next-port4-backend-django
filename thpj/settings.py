@@ -126,13 +126,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-import dj_database_url
-# ~省略~
-default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
-DATABASES = {'default': dj_database_url.config(default=default_dburl)}
-# postgresqlを設定する場合の書式は、postgresql://user_name:password@localhost:port/database_name（以下では、既存のものを書籍に当てはめている）
-# DATABASES = {'default': dj_database_url.parse('postgresql://postgres:password1@localhost:5432/appdb')}
-
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)

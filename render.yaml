@@ -14,7 +14,7 @@ services:
     branch: main
     healthCheckPath: /
     buildCommand: "./build.sh"
-    startCommand: "gunicorn report_project.wsgi --log-file -"
+    startCommand: "gunicorn thpj.wsgi --log-file -"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
