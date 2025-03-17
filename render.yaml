@@ -1,26 +1,29 @@
-
 databases:
-  - name: mysitedb
-    plan: free
+  - name: mysite
     databaseName: mysite
     user: mysite
+    region: singapore
+    plan: free
 
 services:
   - type: web
+    name: mysite
+    env: python
+    region: singapore
     plan: free
-    name: django_web
-    runtime: python
+    branch: main
+    healthCheckPath: /
     buildCommand: "./build.sh"
-    startCommand: 'gunicorn thpj.asgi:application -k uvicorn.workers.UvicornWorker'
-
+    startCommand: "gunicorn report_project.wsgi --log-file -"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: mysitedb
+          name: mysite
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
-      - key: DEBUG  # この行を追加
-        value: "False"  # 本番環境では通常Falseに設定  
+
+
+    autoDeploy: true
