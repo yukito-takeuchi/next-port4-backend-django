@@ -11,10 +11,17 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
+from decouple import config
+from dj_database_url import parse as dburl
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -44,6 +51,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', #追加
     'django.middleware.security.SecurityMiddleware',
+
+    "whitenoise.middleware.WhiteNoiseMiddleware", # 追加
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,14 +85,17 @@ WSGI_APPLICATION = 'thpj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':'django.db.backends.postgresql_psycopg2', # PostgreSQL使いますよ宣言
+        'NAME': 'appdb', # データベース名
+        'USER': 'postgres', # データベースに接続するDBユーザー名
+        'PASSWORD': 'password1', # データベースに接続する際のDBユーザのパスワード
+        'HOST': '', # 'localhost'
+        'PORT': '', # 5432
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -118,13 +130,29 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+import dj_database_url
+# ~省略~
+default_dburl = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
+DATABASES = {'default': dj_database_url.config(default=default_dburl)}
+# postgresqlを設定する場合の書式は、postgresql://user_name:password@localhost:port/database_name（以下では、既存のものを書籍に当てはめている）
+# DATABASES = {'default': dj_database_url.parse('postgresql://postgres:password1@localhost:5432/appdb')}
+
+
 STATIC_URL = 'static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# 以下を追加
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+dotenv.load_dotenv() # .env ファイルを読み込む
+SUPERUSER_NAME = os.getenv('SUPERUSER_NAME')
+SUPERUSER_EMAIL = os.getenv('SUPERUSER_EMAIL')
+SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
 
 # 追加
 CORS_ALLOWED_ORIGINS = [

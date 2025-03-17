@@ -1,0 +1,26 @@
+
+databases:
+  - name: mysitedb
+    plan: free
+    databaseName: mysite
+    user: mysite
+
+services:
+  - type: web
+    plan: free
+    name: django_web
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: 'gunicorn thpj.asgi:application -k uvicorn.workers.UvicornWorker'
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mysitedb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DEBUG  # この行を追加
+        value: "False"  # 本番環境では通常Falseに設定  
