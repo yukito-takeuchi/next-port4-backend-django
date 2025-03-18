@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'rest_framework',
+    'corsheaders', #追加
 ]
 
 MIDDLEWARE = [
@@ -145,8 +146,16 @@ SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
 
 # 追加
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://next-port5-frontend-page-r-git-e50f87-ajdjaiuoapooiads-projects.vercel.app/",  # Next.jsアプリケーションのURL
-    "https://next-port5-frontend-page-router-jbzh-hg8lmuwvr.vercel.app/",
-    'https://next-port5-frontend-page-router-yrat.vercel.app/',
+    'https://next-port5-frontend-page-router-jbzh-e4yhd13le.vercel.app',
+    'https://next-port5-frontend-page-router-jbzh-o7gjw3dms.vercel.app',
+    'https://next-port5-frontend-page-router-jbzh-9qe9xpx4v.vercel.app',
+    'https://next-port5-frontend-page-router-jbzh-c2aoojbii.vercel.app',
+    "http://127.0.0.1:3000", #ローカル環境で開発する場合追記してください。
+    "http://localhost:3000", #ローカル環境で開発する場合追記してください。
+    'https://next-port5-frontend-page-router-jbzh.vercel.app',
+    'https://next-port5-frontend-page-router-jbzh-nlx5de60q.vercel.app',
+    'https://next-port5-frontend-page-r-git-e50f87-ajdjaiuoapooiads-projects.vercel.app',
 ]
+
+
+
