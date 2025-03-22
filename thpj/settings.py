@@ -148,9 +148,7 @@ SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
 CORS_ALLOWED_ORIGINS = [
     'https://next-port5-frontend-page-router-jbzh.vercel.app', #多分これがメインのURL
     'https://next-port5-frontend-page-router-jbzh-anyzrl14x.vercel.app',
-
     
-
     "http://127.0.0.1:3000", #ローカル環境で開発する場合追記してください。
     "http://localhost:3000", #ローカル環境で開発する場合追記してください。,
 ]
