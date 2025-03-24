@@ -87,7 +87,6 @@ def scrape_jobs(url):
     # print(data[0]['title'])
     print(data)
 
-
 def scrape_all_amazon_jobs(url):
     driver = webdriver.Chrome()  # または他のブラウザのWebDriver
     driver.get(url)
@@ -95,7 +94,7 @@ def scrape_all_amazon_jobs(url):
 
     all_jobs = []
     page_num = 1
-    max_clicks = 10  # 最大クリック回数（無限ループ防止）
+    max_clicks = 20  # 最大クリック回数（無限ループ防止）
     click_count = 0
 
     while click_count < max_clicks:
@@ -120,13 +119,21 @@ def scrape_all_amazon_jobs(url):
                 print(f"要素が見つかりませんでした: {e}")
 
         try:
-            # "Go to next page" ボタンをクリック
+            # "Go to next page" ボタンを取得
             next_page_button = driver.find_element(By.XPATH, "//button[@aria-label='Go to next page']")
+
+            # disabled 属性の有無で次のページが存在するか判定
+            if next_page_button.get_attribute('disabled'):
+                print("最後のページです。スクレイピング終了")
+                break
+
+            # 次のページへ移動
             next_page_button.click()
             time.sleep(3)  # 次のページの読み込みを待機
             page_num += 1
             click_count += 1
             print(f"ページ {page_num} をスクレイピング中...")
+
         except NoSuchElementException:
             print("次のページボタンが見つかりません。スクレイピング終了")
             break
@@ -137,11 +144,9 @@ def scrape_all_amazon_jobs(url):
     driver.quit()
     return all_jobs
 
+
+
 url = 'https://www.wantedly.com/projects?new=true&page=1&occupationTypes=jp__engineering&hiringTypes=internship&areas=kyoto&order=mixed'
-
-# scrape_jobs(url)
-
-# 例：Amazonの求人ページのURL
 
 jobs = scrape_all_amazon_jobs(url)
 
